@@ -1,0 +1,46 @@
+#include <string>
+#include <vector>
+#include <map>
+#include <sstream>
+using namespace std;
+
+vector<string> solution(vector<string> record) {
+    vector<string> answer;
+    map<string, string> userData;   // uid, NickName
+    vector<pair<string, string>> userRecord; // uid, Action
+    
+    for(int i = 0; i < record.size(); i++)
+    {
+        istringstream temp(record[i]);
+        string action, uid, nickName;
+        
+        temp >> action >> uid >> nickName;
+        
+        
+        if(action == "Change")
+            userData[uid] = nickName;
+        else
+        {
+             userRecord.push_back(make_pair(uid, action));   
+            
+            if(action == "Enter")
+                if(userData.find(uid) == userData.end())
+                    userData.insert({uid, nickName});
+                else userData[uid] = nickName;
+        }
+    }
+    
+    for(int i = 0; i < userRecord.size(); i++)
+    {
+        string temp = "";
+        temp += userData[userRecord[i].first] + "님이";
+        
+        if(userRecord[i].second == "Enter")
+            temp += " 들어왔습니다.";
+        else
+            temp += " 나갔습니다.";
+        
+        answer.push_back(temp);
+    }
+    return answer;
+}
